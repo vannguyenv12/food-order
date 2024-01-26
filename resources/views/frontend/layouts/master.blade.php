@@ -18,6 +18,7 @@
 
     <link rel="stylesheet" href="{{ 'frontend/css/style.css' }}">
     <link rel="stylesheet" href="{{ 'frontend/css/responsive.css' }}">
+    <link rel="stylesheet" href="{{ 'frontend/css/toastr.min.css' }}">
     <!-- <link rel="stylesheet" href="css/rtl.css"> -->
 </head>
 
@@ -110,8 +111,20 @@
     <!-- ex zoom js -->
     <script src="{{ asset('frontend/js/jquery.exzoom.js') }}"></script>
 
+    <script src="{{ asset('frontend/js/toastr.min.js') }}"></script>
+
     <!--main/custom js-->
     <script src="{{ asset('frontend/js/main.js') }}"></script>
+
+    <script>
+        toastr.options.closeButton = true;
+
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                toastr.error("{{ $error }}");
+            @endforeach
+        @endif
+    </script>
 
 </body>
 
