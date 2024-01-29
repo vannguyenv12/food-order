@@ -50,8 +50,8 @@
 
 @section('content')
     <!--=============================
-                        BREADCRUMB START
-                    ==============================-->
+                                BREADCRUMB START
+                            ==============================-->
     <section class="fp__breadcrumb" style="background: url(images/counter_bg.jpg);">
         <div class="fp__breadcrumb_overlay">
             <div class="container">
@@ -66,13 +66,13 @@
         </div>
     </section>
     <!--=============================
-                        BREADCRUMB END
-                    ==============================-->
+                                BREADCRUMB END
+                            ==============================-->
 
 
     <!--=========================
-                        SIGNIN START
-                    ==========================-->
+                                SIGNIN START
+                            ==========================-->
     <section class="fp__signin" style="background: url(images/login_bg.jpg);">
         <div class="fp__signin_overlay pt_125 xs_pt_95 pb_100 xs_pb_70">
             <div class="container">
@@ -106,7 +106,7 @@
                                                     Remeber Me
                                                 </label>
                                             </div>
-                                            <a href="forgot_password.html">Forgot Password ?</a>
+                                            <a href="{{ route('password.request') }}">Forgot Password ?</a>
                                         </div>
                                     </div>
                                     <div class="col-xl-12">
@@ -117,7 +117,8 @@
                                 </div>
                             </form>
                             <p class="or"><span>or</span></p>
-                            <p class="create_account">Dont’t have an aceount ? <a href="sign_up.html">Create Account</a>
+                            <p class="create_account">Dont’t have an aceount ? <a href="{{ route('register') }}">Create
+                                    Account</a>
                             </p>
                         </div>
                     </div>
@@ -126,6 +127,6 @@
         </div>
     </section>
     <!--=========================
-                        SIGNIN END
-                    ==========================-->
+                                SIGNIN END
+                            ==========================-->
 @endsection

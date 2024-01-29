@@ -16,9 +16,9 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/animate.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/jquery.exzoom.css') }}">
 
-    <link rel="stylesheet" href="{{ 'frontend/css/style.css' }}">
-    <link rel="stylesheet" href="{{ 'frontend/css/responsive.css' }}">
-    <link rel="stylesheet" href="{{ 'frontend/css/toastr.min.css' }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/toastr.min.css') }}">
     <!-- <link rel="stylesheet" href="css/rtl.css"> -->
 </head>
 
