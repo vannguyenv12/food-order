@@ -7,9 +7,9 @@
         </div>
         <div class="card card-primary">
             <div class="card-header">
-                <h4>Card Header</h4>
+                <h4>All Sliders</h4>
                 <div class="card-header-action">
-                    <a href="#" class="btn btn-primary">
+                    <a href="{{ route('admin.slider.create') }}" class="btn btn-primary">
                         Create New
                     </a>
                 </div>
