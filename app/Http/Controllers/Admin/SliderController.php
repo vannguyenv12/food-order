@@ -110,7 +110,7 @@ class SliderController extends Controller
 
             return response(['status' => 'success', 'message' => 'Deleted Successfully!']);
         } catch (\Exception $e) {
-            return response(['status' => 'error', 'message' => $e->getMessage()]);
+            return response(['status' => 'error', 'message' => 'Something went wrong!']);
         }
     }
 }
