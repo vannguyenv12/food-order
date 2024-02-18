@@ -2,8 +2,8 @@
 
 @section('content')
     <!--=============================
-                                                                                                            BREADCRUMB START
-                                                                                                        ==============================-->
+                                                                                                                        BREADCRUMB START
+                                                                                                                    ==============================-->
     <section class="fp__breadcrumb" style="background: url({{ asset('frontend/images/counter_bg.jpg') }});">
         <div class="fp__breadcrumb_overlay">
             <div class="container">
@@ -18,13 +18,13 @@
         </div>
     </section>
     <!--=============================
-                                                                                                            BREADCRUMB END
-                                                                                                        ==============================-->
+                                                                                                                        BREADCRUMB END
+                                                                                                                    ==============================-->
 
 
     <!--=============================
-                                                                                                            MENU DETAILS START
-                                                                                                        ==============================-->
+                                                                                                                        MENU DETAILS START
+                                                                                                                    ==============================-->
     <section class="fp__menu_details mt_115 xs_mt_85 mb_95 xs_mb_65">
         <div class="container">
             <div class="row">
@@ -64,10 +64,10 @@
                         </p>
                         <h3 class="price">
                             @if ($product->offer_price > 0)
-                                ${{ $product->offer_price }}
-                                <del>${{ $product->price }}</del>
+                                {{ currencyPosition($product->offer_price) }}
+                                <del>{{ currencyPosition($product->price) }}</del>
                             @else
-                                ${{ $product->price }}
+                                {{ currencyPosition($product->price) }}
                             @endif
 
                         </h3>
@@ -286,10 +286,12 @@
                                             href="{{ route('product.show', $relatedProduct->slug) }}">{!! $relatedProduct->name !!}</a>
                                         <h5 class="price">
                                             @if ($relatedProduct->offer_price > 0)
-                                                ${{ $relatedProduct->offer_price }}
-                                                <del>${{ $relatedProduct->price }}</del>
+                                                {{ currencyPosition($relatedProduct->offer_price) }}
+                                                <del>
+                                                    {{ currencyPosition($relatedProduct->price) }}
+                                                </del>
                                             @else
-                                                ${{ $relatedProduct->price }}
+                                                {{ currencyPosition($relatedProduct->price) }}
                                             @endif
 
                                         </h5>
@@ -400,6 +402,6 @@
     <!-- CART POPUT END -->
 
     <!--=============================
-                                                                                                            MENU DETAILS END
-                                                                                                        ==============================-->
+                                                                                                                        MENU DETAILS END
+                                                                                                                    ==============================-->
 @endsection
