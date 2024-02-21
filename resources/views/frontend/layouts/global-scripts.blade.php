@@ -23,4 +23,26 @@
             }
         })
     }
+
+    // Update sidebar cart
+    function updateSidebarCart() {
+        $.ajax({
+            method: 'GET',
+            url: `{{ route('get-cart-products') }}`,
+            beforeSend: function() {
+
+            },
+            success: function(response) {
+                $('.cart_contents').html(response);
+
+            },
+            error: function(xhr, status, error) {
+
+            },
+            complete: function() {
+
+
+            }
+        })
+    }
 </script>

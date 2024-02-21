@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use View;
 
 class CartController extends Controller
 {
@@ -15,6 +17,7 @@ class CartController extends Controller
             $product = Product::with(['productSizes', 'productOptions'])->findOrFail($request->product_id);
             $productSize = $product->productSizes->where('id', $request->product_size)->first();
             $productOptions = $product->productOptions->whereIn('id', $request->product_option);
+
 
             $options = [
                 'product_size' => [],
@@ -26,7 +29,7 @@ class CartController extends Controller
             ];
 
             if ($productSize != null) {
-                $options['product_size'][] = [
+                $options['product_size'] = [
                     'id' => $productSize?->id,
                     'name' => $productSize?->name,
                     'price' => $productSize?->price,
@@ -54,5 +57,11 @@ class CartController extends Controller
         } catch (\Exception $e) {
             return response(['status' => 'error', 'message' => 'Something went wrong!'], 500);
         }
+    }
+
+    public function getCartProducts()
+    {
+        $products = Cart::content();
+        return view('frontend.layouts.ajax-files.sidebar-cart-item')->render();
     }
 }
