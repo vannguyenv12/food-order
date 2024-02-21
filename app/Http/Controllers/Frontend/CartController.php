@@ -64,4 +64,15 @@ class CartController extends Controller
         $products = Cart::content();
         return view('frontend.layouts.ajax-files.sidebar-cart-item')->render();
     }
+
+    public function cartProductRemove($rowId)
+    {
+        try {
+            Cart::remove($rowId);
+
+            return response(['status' => 'success', 'message' => 'Item has been removed!'], 200);
+        } catch (\Exception $e) {
+            return response(['status' => 'error', 'message' => 'Something went wrong'], 500);
+        }
+    }
 }
