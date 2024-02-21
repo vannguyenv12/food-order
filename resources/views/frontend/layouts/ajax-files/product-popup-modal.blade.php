@@ -33,7 +33,7 @@
                 <h5>select size</h5>
                 @foreach ($product->productSizes as $productSize)
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="product_size"
+                        <input class="form-check-input modal_product_size" type="radio" name="product_size"
                             data-price="{{ $productSize->price }}" id="size-{{ $productSize->id }}"
                             value="{{ $productSize->id }}">
                         <label class="form-check-label" for="size-{{ $productSize->id }}">
@@ -50,7 +50,7 @@
                 <h5>select option <span>(optional)</span></h5>
                 @foreach ($product->productOptions as $productOption)
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="product_option[]"
+                        <input class="form-check-input modal_product_option" type="checkbox" name="product_option[]"
                             value="{{ $productOption->id }}" id="option-{{ $productOption->id }}"
                             data-price="{{ $productOption->price }}">
                         <label class="form-check-label" for="option-{{ $productOption->id }}">
@@ -122,7 +122,7 @@
             let quantity = parseFloat($('#quantity').val());
 
             // Calculate the selected size price
-            let selectedSize = $('input[name="product_size"]:checked');
+            let selectedSize = $('.modal_product_size:checked');
             if (selectedSize.length > 0) {
                 selectedSizePrice = parseFloat(selectedSize.data('price'));
             }
@@ -146,10 +146,10 @@
             e.preventDefault();
 
             // Validation
-            let selectedSize = $('input[name="product_size"]');
+            let selectedSize = $('.modal_product_size');
 
             if (selectedSize.length > 0) {
-                if (!$('input[name="product_size"]:checked').val()) {
+                if (!$('.modal_product_size:checked').val()) {
                     toastr.error('Please select a size');
                     console.error('Please select a size')
                     return;
