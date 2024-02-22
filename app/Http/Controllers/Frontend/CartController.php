@@ -7,10 +7,14 @@ use App\Models\Product;
 use Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use View;
 
 class CartController extends Controller
 {
+    public function index()
+    {
+        return view('frontend.pages.cart-view');
+    }
+
     public function addToCart(Request $request)
     {
         try {
