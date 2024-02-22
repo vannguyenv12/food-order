@@ -2,8 +2,8 @@
 
 @section('content')
     <!--=============================
-            BREADCRUMB START
-        ==============================-->
+                                                        BREADCRUMB START
+                                                    ==============================-->
     <section class="fp__breadcrumb" style="background: url(images/counter_bg.jpg);">
         <div class="fp__breadcrumb_overlay">
             <div class="container">
@@ -18,13 +18,13 @@
         </div>
     </section>
     <!--=============================
-            BREADCRUMB END
-        ==============================-->
+                                                        BREADCRUMB END
+                                                    ==============================-->
 
 
     <!--============================
-            CART VIEW START
-        ==============================-->
+                                                        CART VIEW START
+                                                    ==============================-->
     <section class="fp__cart_view mt_125 xs_mt_95 mb_100 xs_mb_70">
         <div class="container">
             <div class="row">
@@ -58,131 +58,47 @@
                                             <a class="clear_all" href="#">clear all</a>
                                         </th>
                                     </tr>
-                                    <tr>
-                                        <td class="fp__pro_img"><img src="images/menu1.png" alt="product"
-                                                class="img-fluid w-100">
-                                        </td>
 
-                                        <td class="fp__pro_name">
-                                            <a href="#">Hyderabadi Biryani</a>
-                                            <span>medium</span>
-                                            <p>coca-cola</p>
-                                            <p>7up</p>
-                                        </td>
+                                    @foreach (Cart::content() as $product)
+                                        <tr>
+                                            <td class="fp__pro_img"><img
+                                                    src="{{ asset($product->options->product_info['image']) }}"
+                                                    alt="product" class="img-fluid w-100">
+                                            </td>
 
-                                        <td class="fp__pro_status">
-                                            <h6>$180.00</h6>
-                                        </td>
+                                            <td class="fp__pro_name">
+                                                <a
+                                                    href="{{ route('product.show', $product->options->product_info['slug']) }}">{{ $product->name }}</a>
+                                                <span>{{ @$product->options->product_size['name'] }}
+                                                    ({{ @currencyPosition($product->options->product_size['price']) }})
+                                                </span>
+                                                @foreach ($product->options->product_options as $option)
+                                                    <p>{{ $option['name'] }} ({{ currencyPosition($option['price']) }})</p>
+                                                @endforeach
+                                            </td>
 
-                                        <td class="fp__pro_select">
-                                            <div class="quentity_btn">
-                                                <button class="btn btn-danger"><i class="fal fa-minus"></i></button>
-                                                <input type="text" placeholder="1">
-                                                <button class="btn btn-success"><i class="fal fa-plus"></i></button>
-                                            </div>
-                                        </td>
+                                            <td class="fp__pro_status">
+                                                <h6>{{ currencyPosition($product->price) }}</h6>
+                                            </td>
 
-                                        <td class="fp__pro_tk">
-                                            <h6>$180,00</h6>
-                                        </td>
+                                            <td class="fp__pro_select">
+                                                <div class="quentity_btn">
+                                                    <button class="btn btn-danger"><i class="fal fa-minus"></i></button>
+                                                    <input type="text" placeholder="1">
+                                                    <button class="btn btn-success"><i class="fal fa-plus"></i></button>
+                                                </div>
+                                            </td>
 
-                                        <td class="fp__pro_icon">
-                                            <a href="#"><i class="far fa-times"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fp__pro_img">
-                                            <img src="images/menu2.png" alt="product" class="img-fluid w-100">
-                                        </td>
+                                            <td class="fp__pro_tk">
+                                                <h6>$180,00</h6>
+                                            </td>
 
-                                        <td class="fp__pro_name">
-                                            <a href="#">Chicken Masala</a>
-                                            <span>small</span>
-                                        </td>
-                                        <td class="fp__pro_status">
-                                            <h6>$140.00</h6>
-                                        </td>
+                                            <td class="fp__pro_icon">
+                                                <a href="#"><i class="far fa-times"></i></a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
 
-                                        <td class="fp__pro_select">
-                                            <div class="quentity_btn">
-                                                <button class="btn btn-danger"><i class="fal fa-minus"></i></button>
-                                                <input type="text" placeholder="1">
-                                                <button class="btn btn-success"><i class="fal fa-plus"></i></button>
-                                            </div>
-                                        </td>
-
-                                        <td class="fp__pro_tk">
-                                            <h6>$140,00</h6>
-                                        </td>
-
-                                        <td class="fp__pro_icon">
-                                            <a href="#"><i class="far fa-times"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fp__pro_img">
-                                            <img src="images/menu3.png" alt="product" class="img-fluid w-100">
-                                        </td>
-
-                                        <td class="fp__pro_name">
-                                            <a href="#">Daria Shevtsova</a>
-                                            <span>large</span>
-                                            <p>coca-cola</p>
-                                            <p>7up</p>
-                                        </td>
-
-
-                                        <td class="fp__pro_status">
-                                            <h6>$220.00</h6>
-                                        </td>
-
-                                        <td class="fp__pro_select">
-                                            <div class="quentity_btn">
-                                                <button class="btn btn-danger"><i class="fal fa-minus"></i></button>
-                                                <input type="text" placeholder="1">
-                                                <button class="btn btn-success"><i class="fal fa-plus"></i></button>
-                                            </div>
-                                        </td>
-
-                                        <td class="fp__pro_tk">
-                                            <h6>$220,00</h6>
-                                        </td>
-
-                                        <td class="fp__pro_icon">
-                                            <a href="#"><i class="far fa-times"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fp__pro_img">
-                                            <img src="images/menu4.png" alt="product" class="img-fluid w-100">
-                                        </td>
-
-                                        <td class="fp__pro_name">
-                                            <a href="#">Hyderabadi Biryani</a>
-                                            <span>medium</span>
-                                            <p>7up</p>
-                                        </td>
-
-                                        <td class="fp__pro_status">
-                                            <h6>$150.00</h6>
-                                        </td>
-
-                                        <td class="fp__pro_select">
-                                            <div class="quentity_btn">
-                                                <button class="btn btn-danger"><i class="fal fa-minus"></i></button>
-                                                <input type="text" placeholder="1">
-                                                <button class="btn btn-success"><i class="fal fa-plus"></i></button>
-                                            </div>
-                                        </td>
-
-                                        <td class="fp__pro_tk">
-                                            <h6>$150.00</h6>
-                                        </td>
-
-                                        <td class="fp__pro_icon">
-                                            <a href="#"><i class="far fa-times"></i></a>
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -206,6 +122,6 @@
         </div>
     </section>
     <!--============================
-            CART VIEW END
-        ==============================-->
+                                                        CART VIEW END
+                                                    ==============================-->
 @endsection
