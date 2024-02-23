@@ -2,9 +2,9 @@
 
 @section('content')
     <!--=============================
-                                                                                                                                                                                                                                                    BREADCRUMB START
-                                                                                                                                                                                                                                                ==============================-->
-    <section class="fp__breadcrumb" style="background: url(images/counter_bg.jpg);">
+                                                                                                                                                                                                                                                                                                BREADCRUMB START
+                                                                                                                                                                                                                                                                                            ==============================-->
+    <section class="fp__breadcrumb" style="background: url({{ asset('frontend/images/counter_bg.jpg') }});">
         <div class="fp__breadcrumb_overlay">
             <div class="container">
                 <div class="fp__breadcrumb_text">
@@ -18,13 +18,13 @@
         </div>
     </section>
     <!--=============================
-                                                                                                                                                                                                                                                    BREADCRUMB END
-                                                                                                                                                                                                                                                ==============================-->
+                                                                                                                                                                                                                                                                                                BREADCRUMB END
+                                                                                                                                                                                                                                                                                            ==============================-->
 
 
     <!--============================
-                                                                                                                                                                                                                                                    CART VIEW START
-                                                                                                                                                                                                                                                ==============================-->
+                                                                                                                                                                                                                                                                                                CART VIEW START
+                                                                                                                                                                                                                                                                                            ==============================-->
     <section class="fp__cart_view mt_125 xs_mt_95 mb_100 xs_mb_70">
         <div class="container">
             <div class="row">
@@ -55,7 +55,7 @@
                                         </th>
 
                                         <th class="fp__pro_icon">
-                                            <a class="clear_all" href="#">clear all</a>
+                                            <a class="clear_all" href="{{ route('cart.destroy') }}">clear all</a>
                                         </th>
                                     </tr>
 
@@ -104,7 +104,13 @@
                                             </td>
                                         </tr>
                                     @endforeach
-
+                                    @if (Cart::content()->count() === 0)
+                                        <tr>
+                                            <td colspan="6" class="text-center" style="width: 100%; display: inline;">
+                                                Cart
+                                                is empty</td>
+                                        </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -128,8 +134,8 @@
         </div>
     </section>
     <!--============================
-                                                                                                                                                                                                                                                    CART VIEW END
-                                                                                                                                                                                                                                                ==============================-->
+                                                                                                                                                                                                                                                                                                CART VIEW END
+                                                                                                                                                                                                                                                                                            ==============================-->
 @endsection
 
 @push('scripts')
@@ -210,7 +216,7 @@
                         showLoader();
                     },
                     success: function(response) {
-
+                        updateSidebarCart();
                     },
                     error: function(xhr, status, error) {
                         let errorMessage = xhr.responseJSON.message;
