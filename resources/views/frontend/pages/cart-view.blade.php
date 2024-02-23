@@ -2,8 +2,8 @@
 
 @section('content')
     <!--=============================
-                                                                                                                                                                                                            BREADCRUMB START
-                                                                                                                                                                                                        ==============================-->
+                                                                                                                                                                                                                                                    BREADCRUMB START
+                                                                                                                                                                                                                                                ==============================-->
     <section class="fp__breadcrumb" style="background: url(images/counter_bg.jpg);">
         <div class="fp__breadcrumb_overlay">
             <div class="container">
@@ -18,13 +18,13 @@
         </div>
     </section>
     <!--=============================
-                                                                                                                                                                                                            BREADCRUMB END
-                                                                                                                                                                                                        ==============================-->
+                                                                                                                                                                                                                                                    BREADCRUMB END
+                                                                                                                                                                                                                                                ==============================-->
 
 
     <!--============================
-                                                                                                                                                                                                            CART VIEW START
-                                                                                                                                                                                                        ==============================-->
+                                                                                                                                                                                                                                                    CART VIEW START
+                                                                                                                                                                                                                                                ==============================-->
     <section class="fp__cart_view mt_125 xs_mt_95 mb_100 xs_mb_70">
         <div class="container">
             <div class="row">
@@ -99,7 +99,8 @@
                                             </td>
 
                                             <td class="fp__pro_icon">
-                                                <a href="#"><i class="far fa-times"></i></a>
+                                                <a href="#" class="remove_cart_product"
+                                                    data-id="{{ $product->rowId }}"><i class="far fa-times"></i></a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -127,8 +128,8 @@
         </div>
     </section>
     <!--============================
-                                                                                                                                                                                                            CART VIEW END
-                                                                                                                                                                                                        ==============================-->
+                                                                                                                                                                                                                                                    CART VIEW END
+                                                                                                                                                                                                                                                ==============================-->
 @endsection
 
 @push('scripts')
@@ -181,6 +182,35 @@
                         if (callback && typeof callback === 'function') {
                             callback(response);
                         }
+                    },
+                    error: function(xhr, status, error) {
+                        let errorMessage = xhr.responseJSON.message;
+                        hideLoader();
+                        toastr.error(errorMessage);
+                    },
+                    complete: function() {
+                        hideLoader();
+                    }
+                })
+            }
+
+            $('.remove_cart_product').on('click', function(e) {
+                e.preventDefault();
+                let rowId = $(this).data('id');
+
+                removeCartProduct(rowId);
+                $(this).closest("tr").remove();
+            })
+
+            function removeCartProduct(rowId) {
+                $.ajax({
+                    method: 'GET',
+                    url: `{{ route('cart-product-remove', ':rowId') }}`.replace(':rowId', rowId),
+                    beforeSend: function() {
+                        showLoader();
+                    },
+                    success: function(response) {
+
                     },
                     error: function(xhr, status, error) {
                         let errorMessage = xhr.responseJSON.message;

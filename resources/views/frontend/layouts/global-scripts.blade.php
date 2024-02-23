@@ -66,7 +66,7 @@
                 if (response.status === 'success') {
                     updateSidebarCart(function() {
                         toastr.success(response.message);
-
+                        hideLoader();
                     });
                 }
             },
