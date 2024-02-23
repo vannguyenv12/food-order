@@ -1,12 +1,20 @@
 <script>
+    function showLoader() {
+        $('.overlay-container').removeClass('d-none');
+        $('.overlay').addClass('active');
+    }
+
+    function hideLoader() {
+        $('.overlay').removeClass('active');
+        $('.overlay-container').addClass('d-none');
+    }
     // Load Product Modal
     function loadProductModal(productId) {
         $.ajax({
             method: 'GET',
             url: `{{ route('load-product-modal', ':productId') }}`.replace(':productId', productId),
             beforeSend: function() {
-                $('.overlay-container').removeClass('d-none');
-                $('.overlay').addClass('active');
+                showLoader();
             },
             success: function(response) {
                 $('.load_product_modal_body').html(response);
@@ -17,8 +25,7 @@
                 console.error(error);
             },
             complete: function() {
-                $('.overlay').removeClass('active');
-                $('.overlay-container').addClass('d-none');
+                hideLoader();
 
             }
         })
@@ -53,21 +60,22 @@
             method: 'GET',
             url: `{{ route('cart-product-remove', ':rowId') }}`.replace(':rowId', rowId),
             beforeSend: function() {
-                $('.overlay-container').removeClass('d-none');
-                $('.overlay').addClass('active');
+                showLoader();
             },
             success: function(response) {
                 if (response.status === 'success') {
                     updateSidebarCart(function() {
                         toastr.success(response.message);
-                        $('.overlay').removeClass('active');
-                        $('.overlay-container').addClass('d-none');
+
                     });
                 }
             },
             error: function(xhr, status, error) {
                 let errorMessage = xhr.responseJSON.message;
                 toastr.error(errorMessage);
+            },
+            complete: function() {
+                hideLoader();
             }
         })
     }

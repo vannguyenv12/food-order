@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Cart;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 
 class CartController extends Controller
@@ -77,6 +78,17 @@ class CartController extends Controller
             return response(['status' => 'success', 'message' => 'Item has been removed!'], 200);
         } catch (\Exception $e) {
             return response(['status' => 'error', 'message' => 'Something went wrong'], 500);
+        }
+    }
+
+    public function cartQtyUpdate(Request $request): Response
+    {
+        try {
+            Cart::update($request->rowId, $request->qty);
+            return response(['product_total' => productTotal($request->rowId)], 200);
+        } catch (\Exception $e) {
+            logger($e);
+            return response(['status' => 'error', 'message' => 'Something went wrong, please reload the page.'], 500);
         }
     }
 }
