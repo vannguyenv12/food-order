@@ -2,8 +2,8 @@
 
 @section('content')
     <!--=============================
-                                                                                                                                                                                                                                                                                                BREADCRUMB START
-                                                                                                                                                                                                                                                                                            ==============================-->
+                                                                                                                                                                                                                                                                                                                                                    BREADCRUMB START
+                                                                                                                                                                                                                                                                                                                                                ==============================-->
     <section class="fp__breadcrumb" style="background: url({{ asset('frontend/images/counter_bg.jpg') }});">
         <div class="fp__breadcrumb_overlay">
             <div class="container">
@@ -18,13 +18,13 @@
         </div>
     </section>
     <!--=============================
-                                                                                                                                                                                                                                                                                                BREADCRUMB END
-                                                                                                                                                                                                                                                                                            ==============================-->
+                                                                                                                                                                                                                                                                                                                                                    BREADCRUMB END
+                                                                                                                                                                                                                                                                                                                                                ==============================-->
 
 
     <!--============================
-                                                                                                                                                                                                                                                                                                CART VIEW START
-                                                                                                                                                                                                                                                                                            ==============================-->
+                                                                                                                                                                                                                                                                                                                                                    CART VIEW START
+                                                                                                                                                                                                                                                                                                                                                ==============================-->
     <section class="fp__cart_view mt_125 xs_mt_95 mb_100 xs_mb_70">
         <div class="container">
             <div class="row">
@@ -134,8 +134,8 @@
         </div>
     </section>
     <!--============================
-                                                                                                                                                                                                                                                                                                CART VIEW END
-                                                                                                                                                                                                                                                                                            ==============================-->
+                                                                                                                                                                                                                                                                                                                                                    CART VIEW END
+                                                                                                                                                                                                                                                                                                                                                ==============================-->
 @endsection
 
 @push('scripts')
@@ -145,15 +145,22 @@
                 let inputField = $(this).siblings(".quantity");
                 let currentValue = parseInt(inputField.val());
                 let rowId = inputField.data("id");
+
                 inputField.val(currentValue + 1);
 
-
-
                 cartQtyUpdate(rowId, inputField.val(), function(response) {
-                    let productTotal = response.product_total;
-                    inputField.closest("tr").find(".product_cart_total").text(
-                        "{{ currencyPosition(':productTotal') }}".replace(':productTotal',
-                            productTotal));
+                    if (response.status === 'success') {
+                        inputField.val(response.qty);
+                        let productTotal = response.product_total;
+                        inputField.closest("tr").find(".product_cart_total").text(
+                            "{{ currencyPosition(':productTotal') }}".replace(':productTotal',
+                                productTotal));
+                    } else if (response.status === 'error') {
+                        inputField.val(response.qty);
+                        toastr.error(response.message);
+                    }
+
+
                 });
             });
 
@@ -162,13 +169,24 @@
                 let currentValue = parseInt(inputField.val());
                 let rowId = inputField.data("id");
 
+                inputField.val(currentValue - 1);
+
                 if (inputField.val() > 1) {
-                    inputField.val(currentValue - 1);
                     cartQtyUpdate(rowId, inputField.val(), function(response) {
-                        let productTotal = response.product_total;
-                        inputField.closest("tr").find(".product_cart_total").text(
-                            "{{ currencyPosition(':productTotal') }}".replace(':productTotal',
-                                productTotal));
+                        if (response.status === 'success') {
+                            inputField.val(response.qty);
+
+                            let productTotal = response.product_total;
+                            inputField.closest("tr").find(".product_cart_total").text(
+                                "{{ currencyPosition(':productTotal') }}".replace(
+                                    ':productTotal',
+                                    productTotal));
+                        } else if (response.status === 'error') {
+                            inputField.val(response.qty);
+                            toastr.error(response.message);
+                        }
+
+
                     });
                 }
             });
