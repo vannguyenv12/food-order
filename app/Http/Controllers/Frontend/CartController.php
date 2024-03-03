@@ -80,7 +80,12 @@ class CartController extends Controller
         try {
             Cart::remove($rowId);
 
-            return response(['status' => 'success', 'message' => 'Item has been removed!'], 200);
+            return response([
+                'status' => 'success',
+                'message' => 'Item has been removed!',
+                'cart_total' => cartTotal(),
+                'grand_cart_total' => grandCartTotal(),
+            ], 200);
         } catch (\Exception $e) {
             return response(['status' => 'error', 'message' => 'Something went wrong'], 500);
         }
@@ -97,7 +102,13 @@ class CartController extends Controller
 
         try {
             $cart = Cart::update($request->rowId, $request->qty);
-            return response(['product_total' => productTotal($request->rowId), 'qty' => $cart->qty], 200);
+            return response([
+                'status' => 'success',
+                'product_total' => productTotal($request->rowId),
+                'qty' => $cart->qty,
+                'cart_total' => cartTotal(),
+                'grand_cart_total' => grandCartTotal(),
+            ], 200);
         } catch (\Exception $e) {
             logger($e);
             return response(['status' => 'error', 'message' => $e->getMessage()], 500);
@@ -107,6 +118,7 @@ class CartController extends Controller
     public function cartDestroy()
     {
         Cart::destroy();
+        session()->forget('coupon');
         return redirect()->back();
     }
 }

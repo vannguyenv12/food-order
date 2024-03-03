@@ -77,12 +77,13 @@ class FrontendController extends Controller
         }
 
         if ($coupon->discount_type === 'percent') {
-            $discount = $subTotal * ($coupon->discount / 100);
+            $discount = number_format($subTotal * ($coupon->discount / 100), 2);
         } else if ($coupon->discount_type === 'amount') {
-            $discount = $coupon->discount;
+            $discount = number_format($coupon->discount);
         }
 
         $finalTotal = $subTotal - $discount;
+        session()->put('coupon', ['code' => $code, 'discount' => $discount]);
 
         return response(['message' => 'Coupon applied successfully', 'discount' => $discount, 'finalTotal' => $finalTotal]);
     }

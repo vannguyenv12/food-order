@@ -2,8 +2,8 @@
 
 @section('content')
     <!--=============================
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                BREADCRUMB START
-                                                                                                                                                                                                                                                                                                                                                                                                                                                            ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        BREADCRUMB START
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ==============================-->
     <section class="fp__breadcrumb" style="background: url({{ asset('frontend/images/counter_bg.jpg') }});">
         <div class="fp__breadcrumb_overlay">
             <div class="container">
@@ -18,13 +18,13 @@
         </div>
     </section>
     <!--=============================
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                BREADCRUMB END
-                                                                                                                                                                                                                                                                                                                                                                                                                                                            ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        BREADCRUMB END
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ==============================-->
 
 
     <!--============================
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                CART VIEW START
-                                                                                                                                                                                                                                                                                                                                                                                                                                                            ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        CART VIEW START
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ==============================-->
     <section class="fp__cart_view mt_125 xs_mt_95 mb_100 xs_mb_70">
         <div class="container">
             <div class="row">
@@ -119,11 +119,25 @@
                 <div class="col-lg-4 wow fadeInUp" data-wow-duration="1s">
                     <div class="fp__cart_list_footer_button">
                         <h6>total cart</h6>
-                        <p>subtotal: <span>{{ currencyPosition(cartTotal()) }}</span></p>
+                        <p>subtotal: <span id="subtotal">{{ currencyPosition(cartTotal()) }}</span></p>
                         <p>delivery: <span>$00.00</span></p>
-                        <p>discount: <span id="discount">{{ currencyPosition(0) }}</span></p>
-                        <p class="total"><span>total:</span> <span
-                                id="final_total">{{ currencyPosition(cartTotal()) }}</span></p>
+                        <p>discount: <span id="discount">
+                                @if (isset(session()->get('coupon')['discount']))
+                                    {{ currencyPosition(session()->get('coupon')['discount']) }}
+                                @else
+                                    {{ currencyPosition(0) }}
+                                @endif
+
+                            </span></p>
+                        <p class="total"><span>total:</span> <span id="final_total">
+                                @if (isset(session()->get('coupon')['discount']))
+                                    {{ currencyPosition(cartTotal() - session()->get('coupon')['discount']) }}
+                                @else
+                                    {{ currencyPosition(cartTotal()) }}
+                                @endif
+
+                            </span>
+                        </p>
                         <form id="coupon_form">
                             <input type="text" id="coupon_code" name="code" placeholder="Coupon Code">
                             <button type="submit">apply</button>
@@ -135,13 +149,15 @@
         </div>
     </section>
     <!--============================
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                CART VIEW END
-                                                                                                                                                                                                                                                                                                                                                                                                                                                            ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        CART VIEW END
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ==============================-->
 @endsection
 
 @push('scripts')
     <script>
         $(document).ready(function() {
+            var cartTotal = parseInt(`{{ cartTotal() }}`);
+
             $('.increment').on('click', function() {
                 let inputField = $(this).siblings(".quantity");
                 let currentValue = parseInt(inputField.val());
@@ -156,6 +172,13 @@
                         inputField.closest("tr").find(".product_cart_total").text(
                             "{{ currencyPosition(':productTotal') }}".replace(':productTotal',
                                 productTotal));
+
+                        cartTotal = response.cart_total;
+                        updateSubtotal(cartTotal);
+
+                        $('#final_total').text(
+                            `{{ currencyPosition('${response.grand_cart_total}') }}`);
+
                     } else if (response.status === 'error') {
                         inputField.val(response.qty);
                         toastr.error(response.message);
@@ -182,6 +205,12 @@
                                 "{{ currencyPosition(':productTotal') }}".replace(
                                     ':productTotal',
                                     productTotal));
+
+                            cartTotal = response.cart_total;
+                            updateSubtotal(cartTotal);
+
+                            $('#final_total').text(
+                                `{{ currencyPosition('${response.grand_cart_total}') }}`);
                         } else if (response.status === 'error') {
                             inputField.val(response.qty);
                             toastr.error(response.message);
@@ -236,6 +265,10 @@
                     },
                     success: function(response) {
                         updateSidebarCart();
+                        cartTotal = response.cart_total;
+                        updateSubtotal(cartTotal);
+                        $('#final_total').text(
+                            `{{ currencyPosition('${response.grand_cart_total}') }}`);
                     },
                     error: function(xhr, status, error) {
                         let errorMessage = xhr.responseJSON.message;
@@ -251,10 +284,14 @@
             $('#coupon_form').on('submit', function(e) {
                 e.preventDefault();
                 let code = $('#coupon_code').val();
-                let cartTotal = getCartTotal();
+                let subtotal = cartTotal;
 
-                couponApply(code, cartTotal);
+                couponApply(code, subtotal);
             })
+
+            function updateSubtotal(cartTotal) {
+                $('#subtotal').text(`{{ currencyPosition('${cartTotal}') }}`)
+            }
 
             function couponApply(code, subTotal) {
                 $.ajax({
