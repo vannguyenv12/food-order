@@ -79,4 +79,9 @@
             }
         })
     }
+
+    // Get current cart total amount
+    function getCartTotal() {
+        return parseInt(`{{ cartTotal() }}`);
+    }
 </script>

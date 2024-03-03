@@ -49,3 +49,6 @@ Route::get('cart-product-remove/{rowId}', [CartController::class, 'cartProductRe
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart-update-qty', [CartController::class, 'cartQtyUpdate'])->name('cart.quantity-update');
 Route::get('/cart-destroy', [CartController::class, 'cartDestroy'])->name('cart.destroy');
+
+// Coupon
+Route::post('/apply-coupon', [FrontendController::class, 'applyCoupon'])->name('apply-coupon');
