@@ -2,8 +2,8 @@
 
 @section('content')
     <!--=============================
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        BREADCRUMB START
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                BREADCRUMB START
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ==============================-->
     <section class="fp__breadcrumb" style="background: url({{ asset('frontend/images/counter_bg.jpg') }});">
         <div class="fp__breadcrumb_overlay">
             <div class="container">
@@ -18,13 +18,13 @@
         </div>
     </section>
     <!--=============================
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        BREADCRUMB END
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                BREADCRUMB END
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ==============================-->
 
 
     <!--============================
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        CART VIEW START
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                CART VIEW START
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ==============================-->
     <section class="fp__cart_view mt_125 xs_mt_95 mb_100 xs_mb_70">
         <div class="container">
             <div class="row">
@@ -142,6 +142,20 @@
                             <input type="text" id="coupon_code" name="code" placeholder="Coupon Code">
                             <button type="submit">apply</button>
                         </form>
+
+                        <div class="coupon_card">
+                            @if (session()->has('coupon'))
+                                <div class="card mt-2">
+                                    <div class="m-3">
+                                        <span>Applied Coupon: <b>{{ session()->get('coupon')['code'] }}</b></span>
+                                        <span>
+                                            <button id="destroy_coupon"><i class="far fa-times"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+
                         <a class="common_btn" href=" #">checkout</a>
                     </div>
                 </div>
@@ -149,8 +163,8 @@
         </div>
     </section>
     <!--============================
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        CART VIEW END
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                CART VIEW END
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ==============================-->
 @endsection
 
 @push('scripts')
@@ -305,16 +319,60 @@
                         showLoader();
                     },
                     success: function(response) {
+                        $('#coupon_code').val("");
+
                         $('#discount').text(`{{ config('settings.site_currency_icon') }}` + response
                             .discount);
 
                         $('#final_total').text(`{{ config('settings.site_currency_icon') }}` + response
                             .finalTotal);
 
+                        let couponCartHtml = `<div class="card mt-2">
+                                    <div class="m-3">
+                                        <span>Applied Coupon: <b>${response.coupon_code}</b></span>
+                                        <span>
+                                            <button id="destroy_coupon"><i class="far fa-times"></i></button>
+                                        </span>
+                                    </div>
+                                </div>`;
+
+                        $('.coupon_card').html(couponCartHtml);
+
                         toastr.success(response.message);
                     },
                     error: function(xhr, status, error) {
                         let errorMessage = xhr.responseJSON.message;
+                        toastr.error(errorMessage);
+                    },
+                    complete: function() {
+                        hideLoader();
+                    }
+                })
+            }
+
+            $(document).on('click', '#destroy_coupon', function(e) {
+                destroyCoupon();
+            })
+
+            function destroyCoupon() {
+                $.ajax({
+                    method: 'GET',
+                    url: `{{ route('destroy-coupon') }}`,
+                    beforeSend: function() {
+                        showLoader();
+                    },
+                    success: function(response) {
+                        $('#coupon_code').val("");
+                        $('#discount').text(`{{ config('settings.site_currency_icon') }}` + 0)
+                        $('#final_total').text(`{{ config('settings.site_currency_icon') }}` + response
+                            .grand_cart_total);
+                        $('.coupon_card').html('');
+                        toastr.success(response.message);
+
+                    },
+                    error: function(xhr, status, error) {
+                        let errorMessage = xhr.responseJSON.message;
+                        hideLoader();
                         toastr.error(errorMessage);
                     },
                     complete: function() {
