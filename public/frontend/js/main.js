@@ -37,7 +37,7 @@ $(function () {
     $("#select_js").niceSelect();
     $("#select_js2").niceSelect();
     $("#select_js3").niceSelect();
-    $("#select_js4").niceSelect();
+    $(".nice-select").niceSelect();
 
     //=======BANNER SLIDER======
     $(".banner_slider").slick({
