@@ -15,8 +15,9 @@ class DashboardController extends Controller
     public function index(): View
     {
         $deliveryAreas = DeliveryArea::where('status', 1)->get();
+        $userAddresses = Address::where('user_id', auth()->user()->id)->get();
 
-        return view('frontend.dashboard.index', compact('deliveryAreas'));
+        return view('frontend.dashboard.index', compact('deliveryAreas', 'userAddresses'));
     }
 
     public function createAddress(AddressCreateRequest $request)
