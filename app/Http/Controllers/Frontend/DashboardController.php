@@ -35,7 +35,7 @@ class DashboardController extends Controller
 
         toastr()->success('Created Successfully!');
 
-        return to_route('dashboard');
+        return redirect()->back();
     }
 
     public function updateAddress(string $id, AddressCreateRequest $request)
