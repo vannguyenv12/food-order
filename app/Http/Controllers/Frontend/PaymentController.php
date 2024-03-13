@@ -30,7 +30,27 @@ class PaymentController extends Controller
 
         // Create Order
         if ($orderService->createOrder()) {
-            return true;
+            switch ($request->payment_gateway) {
+                case 'paypal':
+                    return response(['redirect_url' => route('paypal.payment')]);
+                    break;
+
+                default:
+                    break;
+            }
         }
+    }
+
+    public function payWithPaypal()
+    {
+        return "Payment Processing";
+    }
+
+    public function paypalSuccess()
+    {
+    }
+
+    public function paypalCancel()
+    {
     }
 }
