@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Events\OrderPaymentUpdateEvent;
 use App\Http\Controllers\Controller;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
 class PaymentController extends Controller
 {
@@ -68,11 +70,63 @@ class PaymentController extends Controller
 
     public function payWithPaypal()
     {
-        return "Payment Processing";
+        $config = $this->setPaypalConfig();
+        $provider = new PayPalClient($config);
+        $provider->getAccessToken();
+
+        // Calculate amount
+        $grandTotal = session()->get('grand_total');
+        $payableAmount = round($grandTotal * config('gatewaySettings.paypal_rate'));
+
+        $response = $provider->createOrder([
+            'intent' => 'CAPTURE',
+            'application_context' => [
+                'return_url' => route('paypal.success'),
+                'cancel_url' => route('paypal.cancel'),
+            ],
+            'purchase_units' => [
+                [
+                    'amount' => [
+                        'currency_code' => config('gatewaySettings.paypal_currency'),
+                        'value' => $payableAmount,
+                    ]
+                ]
+            ],
+        ]);
+
+        if (isset($response['id']) && $response['id'] != NULL) {
+            foreach ($response['links'] as $link) {
+                if ($link['rel'] === 'approve') {
+                    return redirect()->away($link['href']);
+                }
+            }
+        } else {
+        }
     }
 
-    public function paypalSuccess()
+    public function paypalSuccess(Request $request)
     {
+        $config = $this->setPaypalConfig();
+        $provider = new PayPalClient($config);
+        $provider->getAccessToken();
+
+        // Validate token from paypal
+        $response = $provider->capturePaymentOrder($request->token);
+
+        if (isset($response['status']) && $response['status'] === 'COMPLETED') {
+            $orderId = session()->get('order_id');
+
+            $capture = $response['purchase_units'][0]['payments']['captures'][0];
+            $paymentInfo = [
+                'transaction_id' => $capture['id'],
+                'currency' => $capture['amount']['currency_code'],
+                'status' => $capture['status'],
+            ];
+
+            OrderPaymentUpdateEvent::dispatch($orderId, $paymentInfo, 'PayPal');
+
+            dd('success');
+        }
     }
 
     public function paypalCancel()
