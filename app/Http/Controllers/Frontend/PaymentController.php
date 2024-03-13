@@ -29,10 +29,8 @@ class PaymentController extends Controller
         ]);
 
         // Create Order
-        try {
-            $orderService->createOrder();
-        } catch (\Exception $e) {
-            throw $e;
+        if ($orderService->createOrder()) {
+            return true;
         }
     }
 }
