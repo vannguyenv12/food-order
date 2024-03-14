@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Events\OrderPaymentUpdateEvent;
+use App\Events\OrderPlaceNotificationEvent;
 use App\Http\Controllers\Controller;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
@@ -124,6 +125,7 @@ class PaymentController extends Controller
             ];
 
             OrderPaymentUpdateEvent::dispatch($orderId, $paymentInfo, 'PayPal');
+            OrderPlaceNotificationEvent::dispatch($orderId);
 
             dd('success');
         }
