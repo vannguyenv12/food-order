@@ -25,6 +25,16 @@ class PaymentController extends Controller
         return view('frontend.pages.payment', compact('subtotal', 'delivery', 'discount', 'grandTotal'));
     }
 
+    public function paymentSuccess()
+    {
+        return view('frontend.pages.payment-success');
+    }
+
+    public function paymentCancel()
+    {
+        return view('frontend.pages.payment-cancel');
+    }
+
     public function makePayment(Request $request, OrderService $orderService)
     {
         $request->validate([
@@ -102,6 +112,7 @@ class PaymentController extends Controller
                 }
             }
         } else {
+            return redirect()->route('payment.cancel')->withErrors(['error' => $response['error']['message']]);
         }
     }
 
@@ -127,11 +138,14 @@ class PaymentController extends Controller
             OrderPaymentUpdateEvent::dispatch($orderId, $paymentInfo, 'PayPal');
             OrderPlaceNotificationEvent::dispatch($orderId);
 
-            dd('success');
+            return redirect()->route('payment.success');
+        } else {
+            return redirect()->route('payment.cancel')->withErrors(['error' => $response['error']['message']]);
         }
     }
 
     public function paypalCancel()
     {
+        return redirect()->route('payment.cancel');
     }
 }
