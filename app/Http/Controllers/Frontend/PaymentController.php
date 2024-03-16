@@ -66,7 +66,7 @@ class PaymentController extends Controller
             'live' => [
                 'client_id'         => config('gatewaySettings.paypal_api_key'),
                 'client_secret'     => config('gatewaySettings.paypal_secret_id'),
-                'app_id'            => env('PAYPAL_LIVE_APP_ID', ''),
+                'app_id'            => config('gatewaySettings.paypal_app_id'),
             ],
 
             'payment_action' => 'Sale', // Can only be 'Sale', 'Aut horization' or 'Order'
@@ -116,7 +116,7 @@ class PaymentController extends Controller
         }
     }
 
-    public function paypalSuccess(Request $request)
+    public function paypalSuccess(Request $request, OrderService $orderService)
     {
         $config = $this->setPaypalConfig();
         $provider = new PayPalClient($config);
@@ -137,6 +137,9 @@ class PaymentController extends Controller
 
             OrderPaymentUpdateEvent::dispatch($orderId, $paymentInfo, 'PayPal');
             OrderPlaceNotificationEvent::dispatch($orderId);
+
+            // Clear session
+            $orderService->clearSession();
 
             return redirect()->route('payment.success');
         } else {

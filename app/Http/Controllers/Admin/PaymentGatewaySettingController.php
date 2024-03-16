@@ -30,6 +30,7 @@ class PaymentGatewaySettingController extends Controller
             'paypal_rate' => ['required', 'numeric'],
             'paypal_api_key' => ['required'],
             'paypal_secret_id' => ['required'],
+            'paypal_app_id' => ['required'],
 
         ]);
 

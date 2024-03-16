@@ -2,8 +2,8 @@
 
 @section('content')
     <!--=============================
-                                                                                            BREADCRUMB START
-                                                                                        ==============================-->
+                                                                                                BREADCRUMB START
+                                                                                            ==============================-->
     <section class="fp__breadcrumb" style="background: url({{ asset('frontend/images/counter_bg.jpg') }});">
         <div class="fp__breadcrumb_overlay">
             <div class="container">
@@ -18,13 +18,13 @@
         </div>
     </section>
     <!--=============================
-                                                                                                BREADCRUMB END
-                                                                                            ==============================-->
+                                                                                                    BREADCRUMB END
+                                                                                                ==============================-->
 
 
     <!--============================
-                                                                                                PAYMENT PAGE START
-                                                                                            ==============================-->
+                                                                                                    PAYMENT PAGE START
+                                                                                                ==============================-->
     <section class="fp__payment_page mt_100 xs_mt_70 mb_100 xs_mb_70">
         <div class="container">
             <h2>Choose Your Payment Gateway</h2>
@@ -94,8 +94,8 @@
         </div>
     </div>
     <!--============================
-                                                                                                PAYMENT PAGE END
-                                                                                            ==============================-->
+                                                                                                    PAYMENT PAGE END
+                                                                                                ==============================-->
 @endsection
 
 @push('scripts')
