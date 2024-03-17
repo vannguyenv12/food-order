@@ -66,6 +66,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('orders', [OrderController::class, 'index'])->name('order.index');
     Route::get('orders/{id}', [OrderController::class, 'show'])->name('order.show');
 
+    Route::get('orders/status/{id}', [OrderController::class, 'getOrderStatus'])->name('orders.status');
     Route::put('orders/status-update/{id}', [OrderController::class, 'orderStatusUpdate'])->name('orders.status-update');
 
     // Payment Gateway Setting
