@@ -64,6 +64,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::resource('delivery-area', DeliveryAreaController::class);
     // Order Route
     Route::get('orders', [OrderController::class, 'index'])->name('order.index');
+    Route::get('orders/{id}', [OrderController::class, 'show'])->name('order.show');
+
+    Route::put('orders/status-update/{id}', [OrderController::class, 'orderStatusUpdate'])->name('orders.status-update');
 
     // Payment Gateway Setting
     Route::get('/payment-gateway-setting', [PaymentGatewaySettingController::class, 'index'])

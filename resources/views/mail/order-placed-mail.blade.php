@@ -262,8 +262,9 @@
                                                         style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px;">
                                                         <p style="font-weight: 800;">Estimated Delivery Time</p>
                                                         <p>
-                                                            {{ $order->deliveryArea->min_delivery_time }} -
-                                                            {{ $order->deliveryArea->max_delivery_time }}
+                                                            {{ @$order->userAddress->deliveryArea->min_delivery_time }}
+                                                            -
+                                                            {{ @$order->userAddress->deliveryArea->max_delivery_time }}
                                                         </p>
                                                     </td>
                                                 </tr>
