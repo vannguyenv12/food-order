@@ -65,6 +65,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     // Order Route
     Route::get('orders', [OrderController::class, 'index'])->name('order.index');
     Route::get('orders/{id}', [OrderController::class, 'show'])->name('order.show');
+    Route::delete('orders/{id}', [OrderController::class, 'destroy'])->name('order.destroy');
 
     Route::get('orders/status/{id}', [OrderController::class, 'getOrderStatus'])->name('orders.status');
     Route::put('orders/status-update/{id}', [OrderController::class, 'orderStatusUpdate'])->name('orders.status-update');

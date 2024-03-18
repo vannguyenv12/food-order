@@ -57,7 +57,7 @@ class OrderDataTable extends DataTable
                 <i class='fas fa-truck-loading'></i>
                 </a>";
 
-                $delete = "<a href='" . route('admin.slider.destroy', $query->id) . "' class='btn btn-danger delete-item'><i class='fas fa-trash'></i></a>";
+                $delete = "<a href='" . route('admin.order.destroy', $query->id) . "' class='btn btn-danger delete-item'><i class='fas fa-trash'></i></a>";
 
                 return $view . $status . $delete;
             })
