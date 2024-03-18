@@ -67,6 +67,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('orders/{id}', [OrderController::class, 'show'])->name('order.show');
     Route::delete('orders/{id}', [OrderController::class, 'destroy'])->name('order.destroy');
 
+    Route::get('pending-orders', [OrderController::class, 'pendingOrdersIndex'])->name('pending-order');
+    Route::get('inprocess-orders', [OrderController::class, 'inProcessOrdersIndex'])->name('inprocess-order');
+    Route::get('delivered-orders', [OrderController::class, 'deliveredOrdersIndex'])->name('delivered-order');
+    Route::get('declined-orders', [OrderController::class, 'declinedOrdersIndex'])->name('declined-order');
+
+
     Route::get('orders/status/{id}', [OrderController::class, 'getOrderStatus'])->name('orders.status');
     Route::put('orders/status-update/{id}', [OrderController::class, 'orderStatusUpdate'])->name('orders.status-update');
 
