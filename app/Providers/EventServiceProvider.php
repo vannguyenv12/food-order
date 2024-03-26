@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Events\OrderPaymentUpdateEvent;
 use App\Events\OrderPlaceNotificationEvent;
+use App\Events\RTOrderPlacedNotificationEvent;
 use App\Listeners\OrderPaymentUpdateListener;
 use App\Listeners\OrderPlaceNotificationListener;
+use App\Listeners\RTOrderPlacedNotificationListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -27,8 +29,12 @@ class EventServiceProvider extends ServiceProvider
             OrderPaymentUpdateListener::class,
         ],
 
-        OrderPlaceNotificationEvent::class => [
+        RTOrderPlacedNotificationEvent::class => [
             OrderPlaceNotificationListener::class,
+        ],
+
+        RTOrderPlacedNotificationEvent::class => [
+            RTOrderPlacedNotificationListener::class,
         ],
     ];
 

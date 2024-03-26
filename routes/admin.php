@@ -72,9 +72,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('delivered-orders', [OrderController::class, 'deliveredOrdersIndex'])->name('delivered-order');
     Route::get('declined-orders', [OrderController::class, 'declinedOrdersIndex'])->name('declined-order');
 
-
     Route::get('orders/status/{id}', [OrderController::class, 'getOrderStatus'])->name('orders.status');
     Route::put('orders/status-update/{id}', [OrderController::class, 'orderStatusUpdate'])->name('orders.status-update');
+
+    // Order Notification
+    Route::get('clear-notification', [AdminDashboardController::class, 'clearNotification'])->name('clear-notification');
+
 
     // Payment Gateway Setting
     Route::get('/payment-gateway-setting', [PaymentGatewaySettingController::class, 'index'])
@@ -85,4 +88,5 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     // Setting Route
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
     Route::put('/general-setting', [SettingController::class, 'updateGeneralSetting'])->name('general-setting.update');
+    Route::put('/pusher-setting', [SettingController::class, 'updatePusherSetting'])->name('pusher-setting.update');
 });
