@@ -66,7 +66,8 @@ class DailyOfferController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $dailyOffer = DailyOffer::with('product')->findOrFail($id);
+        return view('admin.daily-offer.edit', compact('dailyOffer'));
     }
 
     /**
@@ -74,7 +75,18 @@ class DailyOfferController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'product' => ['required', 'integer'],
+            'status' => ['required', 'boolean']
+        ]);
+
+        $offer = DailyOffer::findOrFail($id);
+        $offer->product_id = $request->product;
+        $offer->status = $request->status;
+        $offer->save();
+
+        toastr()->success('Updated Successfully!');
+        return to_route('admin.daily-offer.index');
     }
 
     /**
@@ -82,6 +94,13 @@ class DailyOfferController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $offer = DailyOffer::findOrFail($id);
+            $offer->delete();
+
+            return response(['status' => 'success', 'message' => 'Deleted Successfully!']);
+        } catch (\Exception $e) {
+            return response(['status' => 'error', 'message' => 'Something went wrong!']);
+        }
     }
 }
