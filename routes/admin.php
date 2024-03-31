@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\DailyOfferController;
 use App\Http\Controllers\Admin\DeliveryAreaController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PaymentGatewaySettingController;
@@ -78,6 +79,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     // Order Notification
     Route::get('clear-notification', [AdminDashboardController::class, 'clearNotification'])->name('clear-notification');
 
+    // Daily Offer Route
+    Route::get('daily-offer/search-product', [DailyOfferController::class, 'productSearch'])->name('daily-offer.search-product');
+    Route::resource('daily-offer', DailyOfferController::class);
 
     // Payment Gateway Setting
     Route::get('/payment-gateway-setting', [PaymentGatewaySettingController::class, 'index'])
