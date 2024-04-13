@@ -28,7 +28,11 @@
         <div class="row grid">
             @foreach ($categories as $category)
                 @php
-                    $products = \App\Models\Product::where(['show_at_home' => 1, 'status' => 1, 'category_id' => $category->id])
+                    $products = \App\Models\Product::where([
+                        'show_at_home' => 1,
+                        'status' => 1,
+                        'category_id' => $category->id,
+                    ])
                         ->orderBy('id', 'DESC')
                         ->take(8)
                         ->get();

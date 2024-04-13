@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Coupon;
+use App\Models\DailyOffer;
 use App\Models\Product;
 use App\Models\SectionTitle;
 use App\Models\Slider;
@@ -21,8 +22,8 @@ class FrontendController extends Controller
         $sectionTitles = $this->getSectionTitles();
         $sliders = Slider::where('status', 1)->get();
         $whyChooseUs = WhyChooseUs::where('status', 1)->get();
-
         $categories = Category::where(['show_at_home' => 1, 'status' => 1])->get();
+        $dailyOffers = DailyOffer::with('product')->where('status', 1)->take(10)->get();
 
         return view(
             'frontend.home.index',
@@ -30,14 +31,18 @@ class FrontendController extends Controller
                 'sliders',
                 'sectionTitles',
                 'whyChooseUs',
-                'categories'
+                'categories',
+                'dailyOffers'
             )
         );
     }
 
     private function getSectionTitles(): Collection
     {
-        $key = ['why_choose_top_title', 'why_choose_main_title', 'why_choose_sub_title'];
+        $key = [
+            'why_choose_top_title', 'why_choose_main_title', 'why_choose_sub_title',
+            'daily_offer_top_title', 'daily_offer_main_title', 'daily_offer_sub_title'
+        ];
 
         return SectionTitle::whereIn('key', $key)->pluck('value', 'key');
     }

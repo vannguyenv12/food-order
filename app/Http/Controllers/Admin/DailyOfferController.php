@@ -6,7 +6,9 @@ use App\DataTables\DailyOfferDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\DailyOffer;
 use App\Models\Product;
+use App\Models\SectionTitle;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -17,7 +19,10 @@ class DailyOfferController extends Controller
      */
     public function index(DailyOfferDataTable $dataTable)
     {
-        return $dataTable->render('admin.daily-offer.index');
+        $key = ['daily_offer_top_title', 'daily_offer_main_title', 'daily_offer_sub_title'];
+        $titles = SectionTitle::whereIn('key', $key)->pluck('value', 'key');
+
+        return $dataTable->render('admin.daily-offer.index', compact('titles'));
     }
 
     public function productSearch(Request $request): Response
@@ -87,6 +92,26 @@ class DailyOfferController extends Controller
 
         toastr()->success('Updated Successfully!');
         return to_route('admin.daily-offer.index');
+    }
+
+    public function updateTitle(Request $request): RedirectResponse
+    {
+        $validatedData = $request->validate([
+            'daily_offer_top_title' => ['max:100'],
+            'daily_offer_main_title' => ['max:200'],
+            'daily_offer_sub_title' => ['max:500'],
+        ]);
+
+        foreach ($validatedData as $key => $value) {
+            SectionTitle::updateOrCreate(
+                ['key' => $key], // if exit key -> update value
+                ['value' => $value],
+            );
+        }
+
+        toastr()->success('Updated successfully!');
+
+        return redirect()->back();
     }
 
     /**

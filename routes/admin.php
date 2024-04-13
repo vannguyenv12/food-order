@@ -81,6 +81,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 
     // Daily Offer Route
     Route::get('daily-offer/search-product', [DailyOfferController::class, 'productSearch'])->name('daily-offer.search-product');
+    Route::put('daily-offer-title-update', [DailyOfferController::class, 'updateTitle'])
+        ->name('daily-offer-title.update');
     Route::resource('daily-offer', DailyOfferController::class);
 
     // Payment Gateway Setting
